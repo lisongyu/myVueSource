@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>响应式原理</title>
+</head>
+
+<body>
+  <div id="app">
+    {{name}}
+    <p id="name">{{name}}</p>
+    <p k-text="age"></p>
+    <input type="text" k-model="name">
+    <button @click="changeName">呵呵</button>
+    <div k-html="html"></div>
+
+  </div>
+  <script src="./dep.js"></script>
+  <script src="./compile.js"></script>
+  <script src="./kvue.js"></script>
+  <script>
+    let vm = new Kvue({
+      el: '#app',
+      data: {
+        name: "I am test",
+        age: 12,
+        html: "<button>这是一个按钮</button>"
+      },
+      created() {
+        console.log("开始啦")
+        setTimeout(() => {
+          this.name = '我是测试'
+        }, 1000)
+      },
+      methods: {
+        changeName() {
+          this.name = "哈喽,开课吧";
+          this.age = 1;
+        }
+      }
+
+    })
+
+    vm._data.test = "hello,kaiheba"
+  </script>
+</body>
+
+</html>
