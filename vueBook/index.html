@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>响应式原理</title>
+</head>
+
+<body>
+  <div id="app">
+    {{name}}
+    <p id="name">woshi{{name}}</p>
+    <p k-text="age"></p>
+    <input type="text" k-model="name">
+    <button @click="changeName">呵呵</button>
+    {{goods}}
+    <div>我是name:<span>{{obj.name}}</span></div>
+    <button @click="action">我要改变name值</button>
+    <div k-html="html"></div>
+
+  </div>
+  <script src="./utils.js"></script>
+  <script src="./dep.js"></script>
+  <script src="./array.js"></script>
+  <script src="./Observer.js"></script>
+  <script src="./compile.js"></script>
+  <script src="./kvue.js"></script>
+  <script>
+    let vm = new Kvue({
+      el: '#app',
+      data: {
+        name: "I am test",
+        age: 12,
+        goods: [1, 2, 3],
+        html: "<button>这是一个按钮</button>",
+        obj: {}
+      },
+      created() {
+        console.log("开始啦")
+        setTimeout(() => {
+          this.name = '我是测试'
+        }, 1000)
+      },
+      methods: {
+        changeName() {
+          this.name = "哈喽,开课吧";
+          this.age = 1;
+        },
+        action() {
+
+          // this.obj.name = 'lisy'  //疑问1
+          //  this.goods.push(4);   //数组方法无法监测
+          // this.goods = [1, 2, 34];
+          this.goods.push(4);
+
+        }
+      }
+
+    })
+
+    vm._data.test = "hello,kaiheba"
+  </script>
+</body>
+
+</html>
