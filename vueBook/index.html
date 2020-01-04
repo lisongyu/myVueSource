@@ -14,9 +14,11 @@
     <p id="name">woshi{{name}}</p>
     <p k-text="age"></p>
     <input type="text" k-model="name">
+
     <button @click="changeName">呵呵</button>
+    <p>{{obj.foo}}</p>
     {{goods}}
-    <div>我是name:<span>{{obj.name}}</span></div>
+
     <button @click="action">我要改变name值</button>
     <div k-html="html"></div>
 
@@ -34,8 +36,11 @@
         name: "I am test",
         age: 12,
         goods: [1, 2, 3],
+
         html: "<button>这是一个按钮</button>",
-        obj: {}
+        obj: {
+          foo: 42323
+        }
       },
       created() {
         console.log("开始啦")
@@ -49,6 +54,7 @@
           this.age = 1;
         },
         action() {
+          this.obj.foo = 9
 
           // this.obj.name = 'lisy'  //疑问1
           //  this.goods.push(4);   //数组方法无法监测
@@ -60,7 +66,12 @@
 
     })
 
-    vm._data.test = "hello,kaiheba"
+    vm.$watch('obj', () => {
+      alert('我变了')
+    }, {
+      immediate: true,
+      deep: true
+    })
   </script>
 </body>
 

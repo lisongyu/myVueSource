@@ -10,6 +10,9 @@ const arrayMethods = Object.create(arrayProto);
 
 
     const result = original.apply(this, args);
+
+    //收集用
+
     const ob = this.__ob__;
     let inserted
     switch (method) {
@@ -21,11 +24,13 @@ const arrayMethods = Object.create(arrayProto);
         inserted = args.slice(2)
         break
     }
-    
+
     if (inserted) {
       ob.observeArray(inserted)
     }
-    ob.dep.notify(result);
+    //触发
+   
+    ob.dep.notify();
 
     return result
   })

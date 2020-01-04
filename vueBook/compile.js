@@ -28,12 +28,14 @@ class Compile {
     //将其转化为数组
     Array.from(childNodes).forEach(node => { //node为每一个节点
       //判断类型
+
       if (this.isElement(node)) {
-        console.log('编译元素')
+
         const nodeAttrs = node.attributes;
         Array.from(nodeAttrs).forEach(attr => {
           let attrName = attr.name; //属性名
           let attrValue = attr.value;
+
           //如果指令
           if (this.isDirective(attrName)) {
             const dir = attrName.substring(2); //截取 k-后面的内容
@@ -47,7 +49,7 @@ class Compile {
         })
         //元素
       } else if (this.isInterpolation(node)) {
-        console.log('编译文本')
+
         this.compileText(node);
       }
       if (node.childNodes && node.childNodes.length) {
@@ -99,18 +101,33 @@ class Compile {
   update(node, vm, exp, dir) {
     const updaterFn = this[dir + 'Updater'];
     //初始化 数据
+    //判断是否含有.
+    var key = vm[exp]
+    if (exp.indexOf('.') != -1) {
+      let expArr = exp.split('.');
+      key = this.dataData(expArr, vm);
+    }
+    updaterFn && updaterFn(node, key);
 
-
-    updaterFn && updaterFn(node, vm[exp]);
     //公用注册
     new Watcher(vm, exp, newVal => {
 
       updaterFn && updaterFn(node, newVal);
 
     })
+  }
+  dataData(expArr, vm) {
+    var getKey = expArr.shift();
+    //this.vm
+    if (expArr.length) {
+      return this.dataData(expArr,vm[getKey])
+    } 
+    
 
+    return vm[getKey]
   }
   compileText(node) {
+
     this.update(node, this.$vm, RegExp.$1, 'text')
 
   }
@@ -120,6 +137,7 @@ class Compile {
   //插值文本
   isInterpolation(node) {
     let reg = /\{\{\s*(\S*)\s*\}\}/;
+
     return node.nodeType === 3 && reg.test(node.textContent)
   }
 }

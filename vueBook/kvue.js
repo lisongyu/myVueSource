@@ -6,36 +6,40 @@ class Kvue {
     //数据响应化
     // this.observe(this._data);
 
+    this.proxyData(this._data)
     new Observer(this._data, this);
     new Compile(option.el, this);
-    console.log(this)
+
+
+
+
 
     if (option.created) {
       option.created.call(this)
     }
 
   }
-  $watch(expOrFn,cb,options) {
+  $watch(expOrFn, cb, options) {
     const vm = this;
-    const options = options || {}
+    const $options = options || {}
     //调用监听方法
-    const watcher = new Watcher(vm, expOrFn, cb, options);
+    const watcher = new Watcher(vm, expOrFn, cb, $options);
     //如果为true
-    if(options.immediate){
-       cb.call(vm,watcher.value)
+    //立刻执行
+    if ($options.immediate) {
+      cb.call(vm, watcher.value)
     }
     return function unwatchFn() {
       watcher.teardown()
     }
-    
+
   }
   observe(data) {
     if (!data || typeof data !== 'object') {
       return;
     }
 
-    const hasProto = '__proto__' in {}
-    const arrayKeys = Object.getOwnPropertyNames(this.arrayMethods())
+
 
 
     //如果为数组
@@ -65,47 +69,33 @@ class Kvue {
     }
   }
   //数组方法重写
-  arrayMethods() {
-    const arrayProto = Array.prototype;
 
-    const arrayMethods = Object.create(arrayProto);
-    ['push', 'pop', 'shift', 'unshift', 'splice', 'sort', 'reserse'].forEach(method => {
-      //缓存原始方法
-      const original = arrayProto[method]; //原始数组方法
 
-      def(arrayMethods, method, function mutator(...args) {
-        console.log(args)
-        const result = original.apply(this, args);
+  proxyData(data) {
 
-        dep.notify();
-        return result
+    Object.keys(data).forEach(key => {
+
+
+      Object.defineProperty(this, key, {
+        get() {
+
+          return data[key]
+        },
+        set(newVal) {
+          data[key] = newVal
+        }
       })
 
-      //代理
-      // Object.defineProperty(arrayMethods, method, {
-      //   value: function (...args) {
 
 
 
-      //     return result
-      //   },
-      //   enumerable: false,
-      //   writable: true,
-      //   configurable: true
-      // })
+
+
     })
-    return arrayMethods
-  }
 
-  proxyData(key) {
-    Object.defineProperty(this, key, {
-      get() {
-        return this._data[key]
-      },
-      set(newVal) {
-        this._data[key] = newVal
-      }
-    })
+
+
+
   }
 
 

@@ -12,6 +12,7 @@
   <div id="app">
     {{name}}
     <p id="name">{{name}}</p>
+
     <p k-text="age"></p>
     <input type="text" k-model="name">
     <button @click="changeName">呵呵</button>
@@ -28,6 +29,7 @@
         name: "I am test",
         age: 12,
         html: "<button>这是一个按钮</button>"
+
       },
       created() {
         console.log("开始啦")
