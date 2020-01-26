@@ -36,7 +36,6 @@ class Watcher {
   //expOrFn 为key属性值 还可为函数
   constructor(vm, expOrFn, cb, options) {
     //将当前watcher实例制定到Dep静态属性target
-
     this.cb = cb;
     this.vm = vm;
 
@@ -54,11 +53,7 @@ class Watcher {
     } else {
       this.getter = parsePath(expOrFn)
     }
-
     this.value = this.get();
-
-    //this.value = expOrFn;
-
   }
   addDep(dep) {
     const id = dep.id

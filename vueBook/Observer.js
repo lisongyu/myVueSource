@@ -1,3 +1,32 @@
+//数据响应原理
+function defineReactive(obj, key, val) {
+  //递归子属性
+  let childOb = observe(val)
+  let dep = new Dep();
+  Object.defineProperty(obj, key, {
+    get() {
+
+      dep.depend();
+      //添加收集
+
+      if (childOb) {
+
+        childOb.dep.depend()
+      }
+      return val
+    },
+    set(newVal) {
+
+      if (val === newVal) {
+        return
+      }
+      val = newVal;
+      dep.notify();
+      console.log(`${key}属性更新了:${val}`)
+
+    }
+  })
+}
 class Observer {
   constructor(value, vm) {
 
@@ -26,57 +55,22 @@ class Observer {
     }
   }
   walk(data) {
-   
+
     Object.keys(data).forEach(key => {
-     
-      this.defineReactive(data, key, data[key]);
+
+      defineReactive(data, key, data[key]);
       //代理data中的属性到vue实例上
-    
+
     })
 
   }
-  //数据响应原理
-  defineReactive(obj, key, val) {
-    //递归子属性
-
   
-
-    let childOb = observe(val)
-
-
-    let dep = new Dep();
-
-
-    Object.defineProperty(obj, key, {
-      get() {
-
-        dep.depend();
-        //添加收集
-
-        if (childOb) {
-
-          childOb.dep.depend()
-        }
-        return val
-      },
-      set(newVal) {
-
-        if (val === newVal) {
-          return
-        }
-        val = newVal;
-        dep.notify();
-        console.log(`${key}属性更新了:${val}`)
-
-      }
-    })
-  }
   //代理属性访问
   proxyData(key) {
-   
+
     console.log(key)
     let vm = this.vm;
-    
+
     Object.defineProperty(vm, key, {
       get() {
 

@@ -116,14 +116,15 @@ class Compile {
 
     })
   }
+  //将数组转化为对象的键值对序列形式
   dataData(expArr, vm) {
+    //取第一个
     var getKey = expArr.shift();
     //this.vm
     if (expArr.length) {
       return this.dataData(expArr,vm[getKey])
     } 
-    
-
+    //最终返回值
     return vm[getKey]
   }
   compileText(node) {

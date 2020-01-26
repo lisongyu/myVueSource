@@ -55,9 +55,9 @@ class Compile {
       }
     })
   }
-  text(node, vm, exp) {
-    this.update(node, vm, exp, 'text')
-  }
+  // text(node, vm, exp) {
+  //   this.update(node, vm, exp, 'text')
+  // }
   //双向绑定
   model(node, vm, exp) {
     //制定input value属性

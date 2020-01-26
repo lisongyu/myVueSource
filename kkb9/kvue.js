@@ -29,12 +29,10 @@ class Kvue {
         return this._data[key]
       },
       set(newVal) {
-        this._data[key]=newVal
+        this._data[key] = newVal
       }
     })
   }
-
-
 
   //数据响应化
   defineReactive(obj, key, val) {
@@ -52,8 +50,10 @@ class Kvue {
         if (val === newVal) {
           return
         }
+        console.log(val)
+    
         val = newVal;
-        dep.notify(newVal)
+        dep.notify()
         console.log(`${key}属性更新了:${val}`)
 
       }

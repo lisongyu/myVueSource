@@ -11,19 +11,35 @@
 <body>
   <div id="app">
     {{name}}
-    <p id="name">woshi{{name}}</p>
+    <p id="name">{{name}}</p>
+    <div id="work" @click="updateData">{{work}}</div>
     <p k-text="age"></p>
+    <p @click="addFn">添加方法1</p>
+    <p @click="addFn2">添加方法2</p>
+    <p @click="removeFn2">移除方法2</p>
+    <p @click="removeFn">移除所有方法</p>
+    <p @click="emitFn">调用方法调用</p>
     <input type="text" k-model="name">
-
+    <p>{{person.work}}</p>
     <button @click="changeName">呵呵</button>
     <p>{{obj.foo}}</p>
     {{goods}}
 
+
+
     <button @click="action">我要改变name值</button>
+
+    <button @click="delProp">我要删除属性</button>
     <div k-html="html"></div>
 
   </div>
   <script src="./utils.js"></script>
+  <script src="./util/nextTick.js"></script>
+  <script src="./instance/events.js"></script>
+  <script src="./instance/render.js"></script>
+  <script src="./set.js"></script>
+  <script src="./del.js"></script>
+
   <script src="./dep.js"></script>
   <script src="./array.js"></script>
   <script src="./Observer.js"></script>
@@ -33,11 +49,15 @@
     let vm = new Kvue({
       el: '#app',
       data: {
+        work: 'worker',
         name: "I am test",
         age: 12,
         goods: [1, 2, 3],
-
+        // work: 'teacher',
         html: "<button>这是一个按钮</button>",
+        person: {
+
+        },
         obj: {
           foo: 42323
         }
@@ -49,29 +69,102 @@
         }, 1000)
       },
       methods: {
+
+        updateData() {
+          window.console.log(document.querySelector('#work').innerHTML);
+          this.work = "kongzhi222";
+          window.console.log(document.querySelector('#work').innerHTML); // 打印 kongzhi111
+
+          this.$nextTick(() => {
+            window.console.log("-------");
+            window.console.log(document.querySelector('#work').innerHTML); // 打印 kongzhi222
+          });
+        },
+        ageFn(msg) {
+          window.console.log(msg);
+        },
         changeName() {
           this.name = "哈喽,开课吧";
           this.age = 1;
         },
         action() {
           this.obj.foo = 9
-
+          // this.person.work = 'teacher'
           // this.obj.name = 'lisy'  //疑问1
           //  this.goods.push(4);   //数组方法无法监测
           // this.goods = [1, 2, 34];
-          this.goods.push(4);
+          // this.work = 'doctoer';
+          // this.goods.push(4);
 
+          this.goods[2] = 7
+          //设置数组值
+          this.$set(this.goods, 2, 7)
+          //设置属性值
+          this.$set(this.person, 'work', 'teacher')
+
+          this.$set(this._data, 'age', '22')
+
+          // this.goods.length = 0;
+        },
+        delProp() {
+          this.$del(this.person, 'work')
+        },
+        addFn() {
+          this.$on("text", function name(msg) {
+            window.console.log(msg);
+          });
+          window.console.log("添加方法1成功");
+        },
+        removeFn2() {
+          this.$off("text", function ageFn(msg) {
+            window.console.log(msg);
+          });
+          window.console.log("移除方法2成功");
+        },
+        removeFn() {
+          this.$off("text");
+          window.console.log("移除所有成功");
+        },
+        addFn2() {
+          this.$on("text", function ageFn(msg) {
+            window.console.log(msg);
+          });
+          window.console.log("添加方法2成功");
+        },
+        emitFn() {
+
+          this.$emit("text", "hi");
         }
+
+
       }
 
     })
 
-    vm.$watch('obj', () => {
-      alert('我变了')
-    }, {
-      immediate: true,
-      deep: true
-    })
+
+
+    // vm.$watch(function () {
+    //   return this.name + this.age
+    // }, () => {
+    //   alert('我没变了')
+    // }, {
+    //   immediate: true,
+    //   deep: true
+    // })
+
+    // vm.$watch('work', (newVal) => {
+    //   alert('我变了' + newVal)
+    // }, {
+    //   immediate: true,
+    //   deep: true
+    // })
+
+    // vm.$watch('person', (newVal) => {
+    //   alert('我变了' + newVal)
+    // }, {
+    //   immediate: true,
+    //   deep: true
+    // })
   </script>
 </body>
 

@@ -1,3 +1,5 @@
+// set();
+
 class Kvue {
   constructor(option) {
     this.$option = option;
@@ -5,23 +7,23 @@ class Kvue {
 
     //数据响应化
     // this.observe(this._data);
+    this.proxyData(this._data);
+    initEvents(this)
 
-    this.proxyData(this._data)
     new Observer(this._data, this);
     new Compile(option.el, this);
 
-
-
-
+    this.$set = set;
+    this.$del = del
 
     if (option.created) {
       option.created.call(this)
     }
 
   }
-  $watch(expOrFn, cb, options) {
+  $watch(expOrFn, cb, $options = {}) {
     const vm = this;
-    const $options = options || {}
+
     //调用监听方法
     const watcher = new Watcher(vm, expOrFn, cb, $options);
     //如果为true
@@ -34,14 +36,17 @@ class Kvue {
     }
 
   }
+  // $set(target, key, val) {
+
+  //   return (function () {
+  //     set(target, key, val)
+  //  })()
+
+  // }
   observe(data) {
     if (!data || typeof data !== 'object') {
       return;
     }
-
-
-
-
     //如果为数组
     if (Array.isArray(data)) {
       // window.dep = new Dep();
@@ -125,3 +130,6 @@ class Kvue {
     })
   }
 }
+
+renderMinix(Kvue);
+eventsMixin(Kvue)

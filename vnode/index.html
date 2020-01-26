@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    .item-header {
+      font-size: 30px;
+      color: green;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <!-- <p class="item">节点1</p> -->
+  </div>
+  <script src="vdom.js"></script>
+  <script>
+    let vnode = createElement('div', {
+      id: 'test'
+    }, [
+      createElement('p', {
+        key: 'a',
+        style: {
+          color: 'blue'
+        }
+      }, '节点1'),
+      createElement('p', {
+        key: 'b',
+        '@click': () => {
+          alert('XX')
+        }
+      }, '节点2'),
+      createElement('p', {
+        key: 'c',
+        'class': 'item-header'
+      }, '节点3'),
+      createElement('p', {
+        key: 'd'
+      }, '节点4')
+    ])
+    console.log(vnode)
+    render(vnode, document.getElementById('app'))
+    // createElement(){
+    //   return {
+    //     tag:'div',
+    //     data:{id:app},
+    //     children:[
+    //       {
+    //         tag:'p',
+    //         data:{
+    //           class:'item'
+    //         },
+    //         children:['节点1']
+    //       }
+    //     ]
+    //   }
+    // }
+
+    // let div=document.createElement('div')
+    // let ret=''
+    // for(let key in div){
+    //   ret+=key+' '
+    // }
+    // console.log(ret)
+  </script>
+</body>
+
+</html>
