@@ -42,31 +42,45 @@
       createElement('p', {
         key: 'd'
       }, '节点4')
-    ])
-    console.log(vnode)
-    render(vnode, document.getElementById('app'))
-    // createElement(){
-    //   return {
-    //     tag:'div',
-    //     data:{id:app},
-    //     children:[
-    //       {
-    //         tag:'p',
-    //         data:{
-    //           class:'item'
-    //         },
-    //         children:['节点1']
-    //       }
-    //     ]
-    //   }
-    // }
+    ]);
 
-    // let div=document.createElement('div')
-    // let ret=''
-    // for(let key in div){
-    //   ret+=key+' '
-    // }
-    // console.log(ret)
+
+
+    let vnode1 = createElement('div', {
+      id: 'test'
+    }, [
+      createElement('p', {
+        key: 'd'
+      }, '节点4'),
+      createElement('p', {
+        key: 'a',
+        style: {
+          color: 'red'
+        }
+      }, '节点1'),
+      createElement('p', {
+        key: 'b'
+
+      }, '节点2'),
+      createElement('p', {
+        key: 'e'
+
+      }, '节点5'),
+      createElement('p', {
+        key: 'f',
+        style: {
+          color: 'red'
+        }
+
+      }, '节点6'),
+
+    ])
+
+    render(vnode, document.getElementById('app'));
+
+    setTimeout(() => {
+      render(vnode1, document.getElementById('app'));
+    }, 1000)
   </script>
 </body>
 
